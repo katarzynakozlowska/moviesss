@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "193333881445",
+    "project_id": "curlz444",
+    "storage_bucket": "curlz444.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:193333881445:android:49fb3253961ef21177f48c",
+        "android_client_info": {
+          "package_name": "com.katarzynakozlowska.curlzzz_new"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "193333881445-slhlh3mm1s6nso8p4lc84nnff9psjos0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBly4bbvXaeqeKQ8o1tAAZfSFwjWtQhz3w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "193333881445-slhlh3mm1s6nso8p4lc84nnff9psjos0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
