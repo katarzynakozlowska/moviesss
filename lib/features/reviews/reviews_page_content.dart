@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curlzzz_new/features/add_reviews/add_reviews_page_content.dart';
+import 'package:curlzzz_new/features/reviews/cubit/reviews_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ReviewsPage extends StatelessWidget {
   const ReviewsPage({super.key});
@@ -16,48 +18,54 @@ class ReviewsPage extends StatelessWidget {
             ),
           );
         },
-        child: Icon(
+        child: const Icon(
           Icons.add,
         ),
       ),
-      body: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection('reviews')
-              .orderBy('rating', descending: true)
-              .snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return Text('Error');
+      body: BlocProvider(
+        create: (context) => ReviewsCubit()..start(),
+        child: BlocBuilder<ReviewsCubit, ReviewsState>(
+          builder: (context, state) {
+            if (state.errorMessage.isNotEmpty) {
+              return Text(
+                'Something went wrong: ${state.errorMessage}',
+              );
             }
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Text('Loading');
+            if (state.isLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
             }
-            final documents = snapshot.data!.docs;
-            return ListView(children: [
-              for (final document in documents) ...[
-                Dismissible(
-                  key: ValueKey(document.id),
-                  onDismissed: (_) {
-                    FirebaseFirestore.instance
-                        .collection('reviews')
-                        .doc(document.id)
-                        .delete();
-                  },
-                  child: Container(
-                      padding: EdgeInsets.all(20.0),
-                      margin: EdgeInsets.all(10.0),
-                      color: Color.fromARGB(255, 243, 177, 198),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(document['title']),
-                          Text(document['rating'].toString())
-                        ],
-                      )),
-                )
-              ]
-            ]);
-          }),
+            final documents = state.documents;
+            return ListView(
+              children: [
+                for (final document in documents) ...[
+                  Dismissible(
+                    key: ValueKey(document.id),
+                    onDismissed: (_) {
+                      FirebaseFirestore.instance
+                          .collection('reviews')
+                          .doc(document.id)
+                          .delete();
+                    },
+                    child: Container(
+                        padding: const EdgeInsets.all(20.0),
+                        margin: const EdgeInsets.all(10.0),
+                        color: const Color.fromARGB(255, 243, 177, 198),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(document['title']),
+                            Text(document['rating'].toString())
+                          ],
+                        )),
+                  )
+                ]
+              ],
+            );
+          },
+        ),
+      ),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:curlzzz_new/features/to_watch/cubit/to_watch_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ToWatchPage extends StatelessWidget {
   ToWatchPage({super.key});
@@ -18,35 +19,42 @@ class ToWatchPage extends StatelessWidget {
           controller.clear();
         },
       ),
-      body: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance.collection('movies').snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return const Text('Error');
+      body: BlocProvider(
+        create: (context) => ToWatchCubit()..start(),
+        child: BlocBuilder<ToWatchCubit, ToWatchState>(
+          builder: (context, state) {
+            if (state.errorMessage.isNotEmpty) {
+              return Text('Something went wrong : ${state.errorMessage}');
             }
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Text('Loading');
+            if (state.isLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
             }
-            final documents = snapshot.data!.docs;
-            return ListView(children: [
-              for (final document in documents) ...[
-                Dismissible(
-                    key: ValueKey(
-                      document.id,
-                    ),
-                    onDismissed: (_) {
-                      FirebaseFirestore.instance
-                          .collection('movies')
-                          .doc(document.id)
-                          .delete();
-                    },
-                    child: MovieWidget(document['title'])),
+            final documents = state.documents;
+            return ListView(
+              children: [
+                for (final document in documents) ...[
+                  Dismissible(
+                      key: ValueKey(
+                        document.id,
+                      ),
+                      onDismissed: (_) {
+                        FirebaseFirestore.instance
+                            .collection('movies')
+                            .doc(document.id)
+                            .delete();
+                      },
+                      child: MovieWidget(document['title'])),
+                ],
+                TextField(
+                  controller: controller,
+                ),
               ],
-              TextField(
-                controller: controller,
-              ),
-            ]);
-          }),
+            );
+          },
+        ),
+      ),
     );
   }
 }

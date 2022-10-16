@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curlzzz_new/features/add_upcoming_movies/addd_upcoming_movies.dart';
+import 'package:curlzzz_new/features/upcoming/cubit/upcoming_movies_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UpcomingMoviesPage extends StatelessWidget {
   const UpcomingMoviesPage({super.key});
@@ -19,16 +21,19 @@ class UpcomingMoviesPage extends StatelessWidget {
         },
         child: const Icon(Icons.add),
       ),
-      body: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance.collection('upcoming').snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return Text('Error');
+      body: BlocProvider(
+        create: (context) => UpcomingMoviesCubit()..start(),
+        child: BlocBuilder<UpcomingMoviesCubit, UpcomingMoviesState>(
+          builder: (context, state) {
+            if (state.errorMessage.isNotEmpty) {
+              return Text('Something went wrog: ${state.errorMessage}');
             }
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Text('Loading');
+            if (state.isLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
             }
-            final documents = snapshot.data!.docs;
+            final documents = state.documents;
             return ListView(
               children: [
                 for (final document in documents) ...[
@@ -38,7 +43,9 @@ class UpcomingMoviesPage extends StatelessWidget {
                 ]
               ],
             );
-          }),
+          },
+        ),
+      ),
     );
   }
 }
