@@ -16,49 +16,50 @@ class _AddReviewState extends State<AddReview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(title: Text('Add review')),
         body: Center(
             child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Padding(
-          padding: EdgeInsets.all(20.0),
-          child: TextField(
-            decoration: InputDecoration(hintText: 'Movie title'),
-            onChanged: (newValue) {
-              setState(() {
-                movieTitle = newValue;
-              });
-            },
-          ),
-        ),
-        const SizedBox(
-          height: 20.0,
-        ),
-        Slider(
-          value: movieRating,
-          onChanged: (newValue) {
-            setState(
-              () {
-                movieRating = newValue;
-              },
-            );
-          },
-          min: 1.0,
-          max: 10.0,
-          divisions: 10,
-          label: movieRating.toString(),
-        ),
-        ElevatedButton(
-            onPressed: movieTitle.isEmpty
-                ? null
-                : () {
-                    FirebaseFirestore.instance.collection('reviews').add({
-                      'title': movieTitle,
-                      'rating': movieRating,
-                    });
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: EdgeInsets.all(20.0),
+              child: TextField(
+                decoration: InputDecoration(hintText: 'Movie title'),
+                onChanged: (newValue) {
+                  setState(() {
+                    movieTitle = newValue;
+                  });
+                },
+              ),
+            ),
+            const SizedBox(
+              height: 20.0,
+            ),
+            Slider(
+              value: movieRating,
+              onChanged: (newValue) {
+                setState(
+                  () {
+                    movieRating = newValue;
                   },
-            child: Text('Add'))
-      ],
-    )));
+                );
+              },
+              min: 1.0,
+              max: 10.0,
+              divisions: 9,
+              label: movieRating.toString(),
+            ),
+            ElevatedButton(
+                onPressed: movieTitle.isEmpty
+                    ? null
+                    : () {
+                        FirebaseFirestore.instance.collection('reviews').add({
+                          'title': movieTitle,
+                          'rating': movieRating,
+                        });
+                      },
+                child: Text('Add'))
+          ],
+        )));
   }
 }
