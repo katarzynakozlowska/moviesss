@@ -18,15 +18,15 @@ class _AddReviewState extends State<AddReview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Add review')),
+        appBar: AppBar(title: const Text('Add review')),
         body: Center(
             child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(20.0),
               child: TextField(
-                decoration: InputDecoration(hintText: 'Movie title'),
+                decoration: const InputDecoration(hintText: 'Movie title'),
                 onChanged: (newValue) {
                   setState(() {
                     movieTitle = newValue;
@@ -58,6 +58,14 @@ class _AddReviewState extends State<AddReview> {
                   if (state.saved == true) {
                     Navigator.of(context).pop();
                   }
+                  if (state.errorMessage.isNotEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(state.errorMessage),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
                 },
                 child: BlocBuilder<AddReviewsCubit, AddReviewsState>(
                   builder: (context, state) {
@@ -70,7 +78,7 @@ class _AddReviewState extends State<AddReview> {
                                       rating: movieRating.toString(),
                                     );
                               },
-                        child: Text('Add'));
+                        child: const Text('Add'));
                   },
                 ),
               ),

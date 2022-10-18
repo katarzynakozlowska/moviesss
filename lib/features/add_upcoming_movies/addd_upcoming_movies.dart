@@ -22,7 +22,7 @@ class _AddUpcomingMovieState extends State<AddUpcomingMovie> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add upcoming movie'),
+        title: const Text('Add upcoming movie'),
         actions: [
           BlocProvider(
             create: (context) => AddUpcomingMoviesCubit(),
@@ -30,6 +30,14 @@ class _AddUpcomingMovieState extends State<AddUpcomingMovie> {
               listener: (context, state) {
                 if (state.saved == true) {
                   Navigator.of(context).pop();
+                }
+                if (state.errorMessage.isNotEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(state.errorMessage),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
                 }
               },
               child:
@@ -43,7 +51,7 @@ class _AddUpcomingMovieState extends State<AddUpcomingMovie> {
                                 .read<AddUpcomingMoviesCubit>()
                                 .upcoming(_title!, _url!, _date!);
                           },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.check,
                     ),
                   );
@@ -101,13 +109,13 @@ class AddBody extends StatelessWidget {
         child: Column(
       children: [
         TextField(
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             hintText: 'Titanic',
           ),
           onChanged: onTitleChanged,
         ),
         TextField(
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             hintText: 'data:image/basBAQA.jpeg',
           ),
           onChanged: onUrlChanged,
