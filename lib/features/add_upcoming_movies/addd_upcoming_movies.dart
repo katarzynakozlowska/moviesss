@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:curlzzz_new/features/add_upcoming_movies/cubit/add_upcoming_movies_cubit.dart';
+import 'package:curlzzz_new/features/upcoming/cubit/upcoming_movies_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddUpcomingMovie extends StatefulWidget {
   AddUpcomingMovie({super.key});
@@ -21,18 +24,31 @@ class _AddUpcomingMovieState extends State<AddUpcomingMovie> {
       appBar: AppBar(
         title: Text('Add upcoming movie'),
         actions: [
-          IconButton(
-            onPressed: _title == null || _url == null || _date == null
-                ? null
-                : () {
-                    FirebaseFirestore.instance.collection('upcoming').add({
-                      'title': _title!,
-                      'url': _url!,
-                      'date': _date!,
-                    });
-                  },
-            icon: Icon(
-              Icons.check,
+          BlocProvider(
+            create: (context) => AddUpcomingMoviesCubit(),
+            child: BlocListener<AddUpcomingMoviesCubit, AddUpcomingMoviesState>(
+              listener: (context, state) {
+                if (state.saved == true) {
+                  Navigator.of(context).pop();
+                }
+              },
+              child:
+                  BlocBuilder<AddUpcomingMoviesCubit, AddUpcomingMoviesState>(
+                builder: (context, state) {
+                  return IconButton(
+                    onPressed: _title == null || _url == null || _date == null
+                        ? null
+                        : () {
+                            context
+                                .read<AddUpcomingMoviesCubit>()
+                                .upcoming(_title!, _url!, _date!);
+                          },
+                    icon: Icon(
+                      Icons.check,
+                    ),
+                  );
+                },
+              ),
             ),
           )
         ],

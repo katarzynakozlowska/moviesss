@@ -1,6 +1,12 @@
 part of 'add_upcoming_movies_cubit.dart';
 
 @immutable
-abstract class AddUpcomingMoviesState {}
+class AddUpcomingMoviesState {
+  AddUpcomingMoviesState({
+    this.errorMessage = '',
+    this.saved = false,
+  });
 
-class AddUpcomingMoviesInitial extends AddUpcomingMoviesState {}
+  final String errorMessage;
+  final bool saved;
+}

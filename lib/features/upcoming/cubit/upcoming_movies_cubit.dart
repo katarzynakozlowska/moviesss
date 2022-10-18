@@ -15,6 +15,11 @@ class UpcomingMoviesCubit extends Cubit<UpcomingMoviesState> {
             isLoading: false,
           ),
         );
+
+  Future<void> dismiss({required String id}) async {
+    await FirebaseFirestore.instance.collection('upcoming').doc(id).delete();
+  }
+
   StreamSubscription? _streamSubscription;
 
   Future<void> start() async {

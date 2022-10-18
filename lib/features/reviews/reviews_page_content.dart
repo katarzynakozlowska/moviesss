@@ -43,22 +43,11 @@ class ReviewsPage extends StatelessWidget {
                   Dismissible(
                     key: ValueKey(document.id),
                     onDismissed: (_) {
-                      FirebaseFirestore.instance
-                          .collection('reviews')
-                          .doc(document.id)
-                          .delete();
+                      context.read<ReviewsCubit>().dismiss(id: document.id);
                     },
-                    child: Container(
-                        padding: const EdgeInsets.all(20.0),
-                        margin: const EdgeInsets.all(10.0),
-                        color: const Color.fromARGB(255, 243, 177, 198),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text(document['title']),
-                            Text(document['rating'].toString())
-                          ],
-                        )),
+                    child: ReviewsWidget(
+                      document: document,
+                    ),
                   )
                 ]
               ],
@@ -67,5 +56,28 @@ class ReviewsPage extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class ReviewsWidget extends StatelessWidget {
+  const ReviewsWidget({
+    Key? key,
+    required this.document,
+  }) : super(key: key);
+  final QueryDocumentSnapshot<Object?> document;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        padding: const EdgeInsets.all(20.0),
+        margin: const EdgeInsets.all(10.0),
+        color: const Color.fromARGB(255, 243, 177, 198),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text(document['title'] ?? "Some Text"),
+            Text(document['rating'].toString())
+          ],
+        ));
   }
 }

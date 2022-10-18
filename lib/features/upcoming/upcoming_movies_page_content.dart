@@ -37,8 +37,16 @@ class UpcomingMoviesPage extends StatelessWidget {
             return ListView(
               children: [
                 for (final document in documents) ...[
-                  UpcomingMovieWidget(
-                    document: document,
+                  Dismissible(
+                    key: ValueKey(document.id),
+                    onDismissed: (_) {
+                      context
+                          .read<UpcomingMoviesCubit>()
+                          .dismiss(id: document.id);
+                    },
+                    child: UpcomingMovieWidget(
+                      document: document,
+                    ),
                   ),
                 ]
               ],
@@ -57,6 +65,7 @@ class UpcomingMovieWidget extends StatelessWidget {
   }) : super(key: key);
 
   final QueryDocumentSnapshot<Object?> document;
+
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:curlzzz_new/features/add_reviews/cubit/add_reviews_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddReview extends StatefulWidget {
   const AddReview({super.key});
@@ -49,16 +51,30 @@ class _AddReviewState extends State<AddReview> {
               divisions: 9,
               label: movieRating.toString(),
             ),
-            ElevatedButton(
-                onPressed: movieTitle.isEmpty
-                    ? null
-                    : () {
-                        FirebaseFirestore.instance.collection('reviews').add({
-                          'title': movieTitle,
-                          'rating': movieRating,
-                        });
-                      },
-                child: Text('Add'))
+            BlocProvider(
+              create: (context) => AddReviewsCubit(),
+              child: BlocListener<AddReviewsCubit, AddReviewsState>(
+                listener: (context, state) {
+                  if (state.saved == true) {
+                    Navigator.of(context).pop();
+                  }
+                },
+                child: BlocBuilder<AddReviewsCubit, AddReviewsState>(
+                  builder: (context, state) {
+                    return ElevatedButton(
+                        onPressed: movieTitle.isEmpty
+                            ? null
+                            : () {
+                                context.read<AddReviewsCubit>().addReviews(
+                                      title: movieTitle,
+                                      rating: movieRating.toString(),
+                                    );
+                              },
+                        child: Text('Add'));
+                  },
+                ),
+              ),
+            )
           ],
         )));
   }

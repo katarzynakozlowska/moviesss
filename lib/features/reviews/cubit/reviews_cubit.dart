@@ -13,6 +13,11 @@ class ReviewsCubit extends Cubit<ReviewsState> {
           errorMessage: '',
           isLoading: false,
         ));
+
+  Future<void> dismiss({required String id}) async {
+    await FirebaseFirestore.instance.collection('reviews',).doc(id,).delete();
+  }
+
   StreamSubscription? _streamSubscription;
 
   Future<void> start() async {
