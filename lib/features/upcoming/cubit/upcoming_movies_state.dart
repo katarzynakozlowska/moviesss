@@ -2,7 +2,7 @@ part of 'upcoming_movies_cubit.dart';
 
 @immutable
 class UpcomingMoviesState {
-  UpcomingMoviesState({
+  const UpcomingMoviesState({
      this.documents =const[],
      this.errorMessage='',
      this.isLoading=false,

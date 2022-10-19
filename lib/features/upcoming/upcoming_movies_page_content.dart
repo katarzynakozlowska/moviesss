@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curlzzz_new/features/add_upcoming_movies/addd_upcoming_movies.dart';
 import 'package:curlzzz_new/features/upcoming/cubit/upcoming_movies_cubit.dart';
 import 'package:curlzzz_new/models/upcoming_model.dart';
@@ -16,7 +15,7 @@ class UpcomingMoviesPage extends StatelessWidget {
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_) => AddUpcomingMovie(),
+              builder: (_) => const AddUpcomingMovie(),
               fullscreenDialog: true,
             ),
           );
@@ -116,7 +115,7 @@ class UpcomingMovieWidget extends StatelessWidget {
                     Text(
                       upcomingModel.daysLeft(),
                     ),
-                    Text('days left')
+                    const Text('days left')
                   ],
                 ),
               )

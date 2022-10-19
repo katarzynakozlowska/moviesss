@@ -1,14 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curlzzz_new/features/add_upcoming_movies/cubit/add_upcoming_movies_cubit.dart';
-import 'package:curlzzz_new/features/upcoming/cubit/upcoming_movies_cubit.dart';
 import 'package:curlzzz_new/repositories/upcoming_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddUpcomingMovie extends StatefulWidget {
-  AddUpcomingMovie({super.key});
+  const AddUpcomingMovie({super.key});
 
   @override
   State<AddUpcomingMovie> createState() => _AddUpcomingMovieState();

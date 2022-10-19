@@ -2,7 +2,6 @@ import 'dart:async';
 
 // ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curlzzz_new/models/watch_model.dart';
 import 'package:curlzzz_new/repositories/watch_repository.dart';
 // ignore: depend_on_referenced_packages

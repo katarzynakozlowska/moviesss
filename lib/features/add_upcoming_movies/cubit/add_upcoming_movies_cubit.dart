@@ -1,6 +1,7 @@
+// ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curlzzz_new/repositories/upcoming_repository.dart';
+// ignore: depend_on_referenced_packages
 import 'package:meta/meta.dart';
 
 part 'add_upcoming_movies_state.dart';
@@ -8,7 +9,7 @@ part 'add_upcoming_movies_state.dart';
 class AddUpcomingMoviesCubit extends Cubit<AddUpcomingMoviesState> {
   AddUpcomingMoviesCubit(
     this._upcomingReposiroty,
-  ) : super(AddUpcomingMoviesState());
+  ) : super(const AddUpcomingMoviesState());
 
   final UpcomingReposiroty _upcomingReposiroty;
 
@@ -23,7 +24,7 @@ class AddUpcomingMoviesCubit extends Cubit<AddUpcomingMoviesState> {
         title: title,
         url: url,
       );
-      emit(AddUpcomingMoviesState(
+      emit(const AddUpcomingMoviesState(
         saved: true,
       ));
     } catch (error) {

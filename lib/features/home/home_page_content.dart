@@ -1,8 +1,9 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:curlzzz_new/features/reviews/reviews_page_content.dart';
 import 'package:curlzzz_new/features/to_watch/to_watch_page_content.dart';
 import 'package:curlzzz_new/features/upcoming/upcoming_movies_page_content.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -26,7 +27,7 @@ class _HomePageState extends State<HomePage> {
           return ToWatchPage();
         }
         if (currentIndex == 2) {
-          return UpcomingMoviesPage();
+          return const UpcomingMoviesPage();
         }
         if (currentIndex == 3) {
           return ReviewsPage();

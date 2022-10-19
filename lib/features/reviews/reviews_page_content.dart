@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curlzzz_new/features/add_reviews/add_reviews_page_content.dart';
 import 'package:curlzzz_new/features/reviews/cubit/reviews_cubit.dart';
 import 'package:curlzzz_new/models/reviews_model.dart';
