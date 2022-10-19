@@ -3,6 +3,7 @@ import 'dart:async';
 // ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:curlzzz_new/models/watch_model.dart';
 // ignore: depend_on_referenced_packages
 import 'package:meta/meta.dart';
 
@@ -30,9 +31,12 @@ class ToWatchCubit extends Cubit<ToWatchState> {
         .collection('movies')
         .snapshots()
         .listen((data) {
+      final watchModels = data.docs.map((doc) {
+        return WatchModel(title: doc['title'], id: doc.id);
+      }).toList();
       emit(
         ToWatchState(
-          documents: data.docs,
+          documents: watchModels,
           errorMessage: '',
           isLoading: false,
         ),

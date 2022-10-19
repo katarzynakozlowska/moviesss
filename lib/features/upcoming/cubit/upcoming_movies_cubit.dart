@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:curlzzz_new/models/upcoming_model.dart';
 import 'package:meta/meta.dart';
 
 part 'upcoming_movies_state.dart';
@@ -34,9 +35,17 @@ class UpcomingMoviesCubit extends Cubit<UpcomingMoviesState> {
         .collection('upcoming')
         .snapshots()
         .listen((data) {
+      final upcomingModels = data.docs.map((doc) {
+        return UpcomingModel(
+          title: doc['title'],
+          url: doc['url'],
+          date: (doc['date'] as Timestamp).toDate(),
+          id: doc.id,
+        );
+      }).toList();
       emit(
         UpcomingMoviesState(
-          documents: data.docs,
+          documents: upcomingModels,
           errorMessage: '',
           isLoading: false,
         ),

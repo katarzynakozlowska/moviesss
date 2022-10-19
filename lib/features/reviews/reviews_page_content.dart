@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curlzzz_new/features/add_reviews/add_reviews_page_content.dart';
 import 'package:curlzzz_new/features/reviews/cubit/reviews_cubit.dart';
+import 'package:curlzzz_new/models/reviews_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -36,17 +37,17 @@ class ReviewsPage extends StatelessWidget {
                 child: CircularProgressIndicator(),
               );
             }
-            final documents = state.documents;
+            final reviewsModels = state.documents;
             return ListView(
               children: [
-                for (final document in documents) ...[
+                for (final reviewsModel in reviewsModels) ...[
                   Dismissible(
-                    key: ValueKey(document.id),
+                    key: ValueKey(reviewsModel.id),
                     onDismissed: (_) {
-                      context.read<ReviewsCubit>().dismiss(id: document.id);
+                      context.read<ReviewsCubit>().dismiss(id: reviewsModel.id);
                     },
                     child: ReviewsWidget(
-                      document: document,
+                      reviewsModel: reviewsModel,
                     ),
                   )
                 ]
@@ -62,9 +63,9 @@ class ReviewsPage extends StatelessWidget {
 class ReviewsWidget extends StatelessWidget {
   const ReviewsWidget({
     Key? key,
-    required this.document,
+    required this.reviewsModel,
   }) : super(key: key);
-  final QueryDocumentSnapshot<Object?> document;
+  final ReviewsModel reviewsModel;
 
   @override
   Widget build(BuildContext context) {
@@ -75,8 +76,8 @@ class ReviewsWidget extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Text(document['title'] ?? "Some Text"),
-            Text(document['rating'].toString())
+            Text(reviewsModel.title),
+            Text(reviewsModel.rating.toString())
           ],
         ));
   }

@@ -7,7 +7,7 @@ class ToWatchState {
     required this.errorMessage,
     required this.isLoading,
   });
-  final List<QueryDocumentSnapshot<Object?>> documents;
+  final List<WatchModel> documents;
   final String errorMessage;
   final bool isLoading;
 }

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curlzzz_new/features/add_upcoming_movies/addd_upcoming_movies.dart';
 import 'package:curlzzz_new/features/upcoming/cubit/upcoming_movies_cubit.dart';
+import 'package:curlzzz_new/models/upcoming_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -33,19 +34,19 @@ class UpcomingMoviesPage extends StatelessWidget {
                 child: CircularProgressIndicator(),
               );
             }
-            final documents = state.documents;
+            final upcomingModels = state.documents;
             return ListView(
               children: [
-                for (final document in documents) ...[
+                for (final upcomingModel in upcomingModels) ...[
                   Dismissible(
-                    key: ValueKey(document.id),
+                    key: ValueKey(upcomingModel.id),
                     onDismissed: (_) {
                       context
                           .read<UpcomingMoviesCubit>()
-                          .dismiss(id: document.id);
+                          .dismiss(id: upcomingModel.id);
                     },
                     child: UpcomingMovieWidget(
-                      document: document,
+                      upcomingModel: upcomingModel,
                     ),
                   ),
                 ]
@@ -61,10 +62,10 @@ class UpcomingMoviesPage extends StatelessWidget {
 class UpcomingMovieWidget extends StatelessWidget {
   const UpcomingMovieWidget({
     Key? key,
-    required this.document,
+    required this.upcomingModel,
   }) : super(key: key);
 
-  final QueryDocumentSnapshot<Object?> document;
+  final UpcomingModel upcomingModel;
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +82,7 @@ class UpcomingMovieWidget extends StatelessWidget {
               color: Colors.black12,
               image: DecorationImage(
                 image: NetworkImage(
-                  document['url'],
+                  upcomingModel.url,
                 ),
                 fit: BoxFit.cover,
               ),
@@ -92,17 +93,33 @@ class UpcomingMovieWidget extends StatelessWidget {
             height: 20,
             width: 300,
             child: Center(
-              child: Text(document['title']),
+              child: Text(upcomingModel.title),
             ),
           ),
           const SizedBox(
             height: 20,
           ),
-          Container(
-            color: Colors.white,
-            child: Text(
-              (document['date'] as Timestamp).toDate().toString(),
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                color: Colors.white,
+                child: Text(
+                  upcomingModel.date.toString(),
+                ),
+              ),
+              Container(
+                color: Colors.white,
+                child: Column(
+                  children: [
+                    Text(
+                      upcomingModel.daysLeft(),
+                    ),
+                    Text('days left')
+                  ],
+                ),
+              )
+            ],
           )
         ],
       ),

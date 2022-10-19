@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curlzzz_new/features/to_watch/cubit/to_watch_cubit.dart';
+import 'package:curlzzz_new/models/watch_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -31,21 +32,21 @@ class ToWatchPage extends StatelessWidget {
                 child: CircularProgressIndicator(),
               );
             }
-            final documents = state.documents;
+            final watchModels = state.documents;
             return ListView(
               children: [
-                for (final document in documents) ...[
+                for (final watchModel in watchModels) ...[
                   Dismissible(
                       key: ValueKey(
-                        document.id,
+                        watchModel.id,
                       ),
                       onDismissed: (_) {
                         FirebaseFirestore.instance
                             .collection('movies')
-                            .doc(document.id)
+                            .doc(watchModel.id)
                             .delete();
                       },
-                      child: MovieWidget(document['title'])),
+                      child: MovieWidget(watchModel.title)),
                 ],
                 TextField(
                   controller: controller,
