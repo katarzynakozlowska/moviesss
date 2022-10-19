@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curlzzz_new/features/add_upcoming_movies/addd_upcoming_movies.dart';
 import 'package:curlzzz_new/features/upcoming/cubit/upcoming_movies_cubit.dart';
 import 'package:curlzzz_new/models/upcoming_model.dart';
+import 'package:curlzzz_new/repositories/upcoming_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,7 +24,7 @@ class UpcomingMoviesPage extends StatelessWidget {
         child: const Icon(Icons.add),
       ),
       body: BlocProvider(
-        create: (context) => UpcomingMoviesCubit()..start(),
+        create: (context) => UpcomingMoviesCubit(UpcomingReposiroty())..start(),
         child: BlocBuilder<UpcomingMoviesCubit, UpcomingMoviesState>(
           builder: (context, state) {
             if (state.errorMessage.isNotEmpty) {

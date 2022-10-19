@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curlzzz_new/features/add_reviews/cubit/add_reviews_cubit.dart';
+import 'package:curlzzz_new/repositories/reviews_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -52,7 +53,7 @@ class _AddReviewState extends State<AddReview> {
               label: movieRating.toString(),
             ),
             BlocProvider(
-              create: (context) => AddReviewsCubit(),
+              create: (context) => AddReviewsCubit(ReviewsRepository()),
               child: BlocListener<AddReviewsCubit, AddReviewsState>(
                 listener: (context, state) {
                   if (state.saved == true) {

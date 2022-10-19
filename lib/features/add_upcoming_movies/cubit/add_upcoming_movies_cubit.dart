@@ -1,11 +1,16 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:curlzzz_new/repositories/upcoming_repository.dart';
 import 'package:meta/meta.dart';
 
 part 'add_upcoming_movies_state.dart';
 
 class AddUpcomingMoviesCubit extends Cubit<AddUpcomingMoviesState> {
-  AddUpcomingMoviesCubit() : super(AddUpcomingMoviesState());
+  AddUpcomingMoviesCubit(
+    this._upcomingReposiroty,
+  ) : super(AddUpcomingMoviesState());
+
+  final UpcomingReposiroty _upcomingReposiroty;
 
   Future<void> upcoming(
     String title,
@@ -13,11 +18,11 @@ class AddUpcomingMoviesCubit extends Cubit<AddUpcomingMoviesState> {
     DateTime date,
   ) async {
     try {
-      await FirebaseFirestore.instance.collection('upcoming').add({
-        'title': title,
-        'url': url,
-        'date': date,
-      });
+      await _upcomingReposiroty.addUpcoming(
+        date: date,
+        title: title,
+        url: url,
+      );
       emit(AddUpcomingMoviesState(
         saved: true,
       ));

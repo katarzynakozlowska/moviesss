@@ -3,12 +3,13 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curlzzz_new/models/upcoming_model.dart';
+import 'package:curlzzz_new/repositories/upcoming_repository.dart';
 import 'package:meta/meta.dart';
 
 part 'upcoming_movies_state.dart';
 
 class UpcomingMoviesCubit extends Cubit<UpcomingMoviesState> {
-  UpcomingMoviesCubit()
+  UpcomingMoviesCubit(this._upcomingRepository)
       : super(
           UpcomingMoviesState(
             documents: const [],
@@ -17,10 +18,7 @@ class UpcomingMoviesCubit extends Cubit<UpcomingMoviesState> {
           ),
         );
 
-  Future<void> dismiss({required String id}) async {
-    await FirebaseFirestore.instance.collection('upcoming').doc(id).delete();
-  }
-
+  final UpcomingReposiroty _upcomingRepository;
   StreamSubscription? _streamSubscription;
 
   Future<void> start() async {
@@ -31,35 +29,30 @@ class UpcomingMoviesCubit extends Cubit<UpcomingMoviesState> {
         isLoading: true,
       ),
     );
-    _streamSubscription = FirebaseFirestore.instance
-        .collection('upcoming')
-        .snapshots()
-        .listen((data) {
-      final upcomingModels = data.docs.map((doc) {
-        return UpcomingModel(
-          title: doc['title'],
-          url: doc['url'],
-          date: (doc['date'] as Timestamp).toDate(),
-          id: doc.id,
-        );
-      }).toList();
+
+    _streamSubscription =
+        _upcomingRepository.getUpcomingStream().listen((upcomingItems) {
       emit(
         UpcomingMoviesState(
-          documents: upcomingModels,
+          documents: upcomingItems,
           errorMessage: '',
           isLoading: false,
         ),
       );
     })
-      ..onError((error) {
-        emit(
-          UpcomingMoviesState(
-            documents: const [],
-            errorMessage: error.toString(),
-            isLoading: false,
-          ),
-        );
-      });
+          ..onError((error) {
+            emit(
+              UpcomingMoviesState(
+                documents: const [],
+                errorMessage: error.toString(),
+                isLoading: false,
+              ),
+            );
+          });
+  }
+
+  Future<void> dismiss({required String id}) async {
+    await FirebaseFirestore.instance.collection('upcoming').doc(id).delete();
   }
 
   @override

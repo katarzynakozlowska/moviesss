@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curlzzz_new/features/add_upcoming_movies/cubit/add_upcoming_movies_cubit.dart';
 import 'package:curlzzz_new/features/upcoming/cubit/upcoming_movies_cubit.dart';
+import 'package:curlzzz_new/repositories/upcoming_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -25,7 +26,7 @@ class _AddUpcomingMovieState extends State<AddUpcomingMovie> {
         title: const Text('Add upcoming movie'),
         actions: [
           BlocProvider(
-            create: (context) => AddUpcomingMoviesCubit(),
+            create: (context) => AddUpcomingMoviesCubit(UpcomingReposiroty()),
             child: BlocListener<AddUpcomingMoviesCubit, AddUpcomingMoviesState>(
               listener: (context, state) {
                 if (state.saved == true) {

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curlzzz_new/features/add_reviews/add_reviews_page_content.dart';
 import 'package:curlzzz_new/features/reviews/cubit/reviews_cubit.dart';
 import 'package:curlzzz_new/models/reviews_model.dart';
+import 'package:curlzzz_new/repositories/reviews_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -24,7 +25,7 @@ class ReviewsPage extends StatelessWidget {
         ),
       ),
       body: BlocProvider(
-        create: (context) => ReviewsCubit()..start(),
+        create: (context) => ReviewsCubit(ReviewsRepository())..start(),
         child: BlocBuilder<ReviewsCubit, ReviewsState>(
           builder: (context, state) {
             if (state.errorMessage.isNotEmpty) {

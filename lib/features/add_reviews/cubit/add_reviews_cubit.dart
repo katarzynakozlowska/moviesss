@@ -1,20 +1,24 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:curlzzz_new/repositories/reviews_repository.dart';
 import 'package:meta/meta.dart';
 
 part 'add_reviews_state.dart';
 
 class AddReviewsCubit extends Cubit<AddReviewsState> {
-  AddReviewsCubit() : super(const AddReviewsState());
+  AddReviewsCubit(this._reviewsRepository) : super(const AddReviewsState());
+
+  final ReviewsRepository _reviewsRepository;
 
   Future<void> addReviews({
     required String title,
     required String rating,
   }) async {
     try {
-      await FirebaseFirestore.instance
-          .collection('reviews')
-          .add({'title': title, 'rating': rating});
+      await _reviewsRepository.addReviews(
+        rating: rating,
+        title: title,
+      );
       emit(const AddReviewsState(
         saved: true,
       ));
