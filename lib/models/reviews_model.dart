@@ -6,6 +6,7 @@ class ReviewsModel {
   });
 
   final String title;
-  final double rating;
+  // ignore: prefer_typing_uninitialized_variables
+  var rating;
   final String id;
 }

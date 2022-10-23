@@ -13,7 +13,7 @@ class AddReviewsCubit extends Cubit<AddReviewsState> {
 
   Future<void> addReviews({
     required String title,
-    required String rating,
+    required double rating,
   }) async {
     try {
       await _reviewsRepository.addReviews(

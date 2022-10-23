@@ -30,7 +30,7 @@ class ReviewsRepository {
   }
 
   Future<void> addReviews(
-      {required String title, required String rating}) async {
+      {required String title, required double rating}) async {
     await FirebaseFirestore.instance.collection('reviews').add({
       'title': title,
       'rating': rating,

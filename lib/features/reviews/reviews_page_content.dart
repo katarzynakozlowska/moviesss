@@ -78,6 +78,7 @@ class ReviewsWidget extends StatelessWidget {
           children: [
             Text(reviewsModel.title),
             Text(reviewsModel.rating.toString())
+            
           ],
         ));
   }

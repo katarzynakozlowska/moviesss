@@ -73,7 +73,7 @@ class _AddReviewState extends State<AddReview> {
                             : () {
                                 context.read<AddReviewsCubit>().addReviews(
                                       title: movieTitle,
-                                      rating: movieRating.toString(),
+                                      rating: movieRating,
                                     );
                               },
                         child: const Text('Add'));
