@@ -1,8 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curlzzz_new/features/add_reviews/cubit/add_reviews_cubit.dart';
+import 'package:curlzzz_new/repositories/reviews_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddReview extends StatefulWidget {
@@ -18,15 +16,15 @@ class _AddReviewState extends State<AddReview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Add review')),
+        appBar: AppBar(title: const Text('Add review')),
         body: Center(
             child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(20.0),
               child: TextField(
-                decoration: InputDecoration(hintText: 'Movie title'),
+                decoration: const InputDecoration(hintText: 'Movie title'),
                 onChanged: (newValue) {
                   setState(() {
                     movieTitle = newValue;
@@ -52,11 +50,19 @@ class _AddReviewState extends State<AddReview> {
               label: movieRating.toString(),
             ),
             BlocProvider(
-              create: (context) => AddReviewsCubit(),
+              create: (context) => AddReviewsCubit(ReviewsRepository()),
               child: BlocListener<AddReviewsCubit, AddReviewsState>(
                 listener: (context, state) {
                   if (state.saved == true) {
                     Navigator.of(context).pop();
+                  }
+                  if (state.errorMessage.isNotEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(state.errorMessage),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
                   }
                 },
                 child: BlocBuilder<AddReviewsCubit, AddReviewsState>(
@@ -67,10 +73,10 @@ class _AddReviewState extends State<AddReview> {
                             : () {
                                 context.read<AddReviewsCubit>().addReviews(
                                       title: movieTitle,
-                                      rating: movieRating.toString(),
+                                      rating: movieRating,
                                     );
                               },
-                        child: Text('Add'));
+                        child: const Text('Add'));
                   },
                 ),
               ),

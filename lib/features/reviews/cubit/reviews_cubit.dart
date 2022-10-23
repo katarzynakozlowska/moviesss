@@ -1,22 +1,23 @@
 import 'dart:async';
 
+// ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:curlzzz_new/models/reviews_model.dart';
+import 'package:curlzzz_new/repositories/reviews_repository.dart';
+// ignore: depend_on_referenced_packages
 import 'package:meta/meta.dart';
 
 part 'reviews_state.dart';
 
 class ReviewsCubit extends Cubit<ReviewsState> {
-  ReviewsCubit()
+  ReviewsCubit(this._reviewsRepository)
       : super(const ReviewsState(
           documents: [],
           errorMessage: '',
           isLoading: false,
         ));
 
-  Future<void> dismiss({required String id}) async {
-    await FirebaseFirestore.instance.collection('reviews',).doc(id,).delete();
-  }
+  final ReviewsRepository _reviewsRepository;
 
   StreamSubscription? _streamSubscription;
 
@@ -26,29 +27,30 @@ class ReviewsCubit extends Cubit<ReviewsState> {
       errorMessage: '',
       isLoading: true,
     ));
-    _streamSubscription = FirebaseFirestore.instance
-        .collection('reviews')
-        .orderBy('rating', descending: true)
-        .snapshots()
-        .listen((data) {
+    _streamSubscription =
+        _reviewsRepository.getReviewsStream().listen((reviews) {
       emit(ReviewsState(
-        documents: data.docs,
+        documents: reviews,
         errorMessage: '',
         isLoading: false,
       ));
     })
-      ..onError((error) {
-        emit(ReviewsState(
-          documents: const [],
-          errorMessage: error.toString(),
-          isLoading: false,
-        ));
-      });
+          ..onError((error) {
+            emit(ReviewsState(
+              documents: const [],
+              errorMessage: error.toString(),
+              isLoading: false,
+            ));
+          });
   }
 
   @override
   Future<void> close() {
     _streamSubscription?.cancel();
     return super.close();
+  }
+
+  Future<void> dismiss({required String id}) async {
+    await _reviewsRepository.delete(id: id);
   }
 }

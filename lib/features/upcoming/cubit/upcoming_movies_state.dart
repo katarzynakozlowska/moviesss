@@ -2,13 +2,13 @@ part of 'upcoming_movies_cubit.dart';
 
 @immutable
 class UpcomingMoviesState {
-  UpcomingMoviesState({
-    required this.documents,
-    required this.errorMessage,
-    required this.isLoading,
+  const UpcomingMoviesState({
+     this.documents =const[],
+     this.errorMessage='',
+     this.isLoading=false,
   });
 
-  final List<QueryDocumentSnapshot<Object?>> documents;
+  final List<UpcomingModel> documents;
   final String errorMessage;
   final bool isLoading;
 }

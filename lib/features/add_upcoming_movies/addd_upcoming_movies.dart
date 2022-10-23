@@ -1,13 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curlzzz_new/features/add_upcoming_movies/cubit/add_upcoming_movies_cubit.dart';
-import 'package:curlzzz_new/features/upcoming/cubit/upcoming_movies_cubit.dart';
+import 'package:curlzzz_new/repositories/upcoming_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class AddUpcomingMovie extends StatefulWidget {
-  AddUpcomingMovie({super.key});
+  const AddUpcomingMovie({super.key});
 
   @override
   State<AddUpcomingMovie> createState() => _AddUpcomingMovieState();
@@ -22,14 +20,22 @@ class _AddUpcomingMovieState extends State<AddUpcomingMovie> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add upcoming movie'),
+        title: const Text('Add upcoming movie'),
         actions: [
           BlocProvider(
-            create: (context) => AddUpcomingMoviesCubit(),
+            create: (context) => AddUpcomingMoviesCubit(UpcomingReposiroty()),
             child: BlocListener<AddUpcomingMoviesCubit, AddUpcomingMoviesState>(
               listener: (context, state) {
                 if (state.saved == true) {
                   Navigator.of(context).pop();
+                }
+                if (state.errorMessage.isNotEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(state.errorMessage),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
                 }
               },
               child:
@@ -43,7 +49,7 @@ class _AddUpcomingMovieState extends State<AddUpcomingMovie> {
                                 .read<AddUpcomingMoviesCubit>()
                                 .upcoming(_title!, _url!, _date!);
                           },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.check,
                     ),
                   );
@@ -75,7 +81,7 @@ class _AddUpcomingMovieState extends State<AddUpcomingMovie> {
             },
           );
         },
-        dateFormatted: _date?.toIso8601String(),
+        dateFormatted: _date == null ? null : DateFormat.MMMEd().format(_date!),
       ),
     );
   }
@@ -101,13 +107,13 @@ class AddBody extends StatelessWidget {
         child: Column(
       children: [
         TextField(
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             hintText: 'Titanic',
           ),
           onChanged: onTitleChanged,
         ),
         TextField(
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             hintText: 'data:image/basBAQA.jpeg',
           ),
           onChanged: onUrlChanged,

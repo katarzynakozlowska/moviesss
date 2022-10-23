@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curlzzz_new/features/to_watch/cubit/to_watch_cubit.dart';
+import 'package:curlzzz_new/repositories/watch_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,17 +11,22 @@ class ToWatchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {
-          FirebaseFirestore.instance
-              .collection('movies')
-              .add({'title': controller.text});
-          controller.clear();
-        },
+      floatingActionButton: BlocProvider(
+        create: (context) => ToWatchCubit(WatchRepository()),
+        child: BlocBuilder<ToWatchCubit, ToWatchState>(
+          builder: (context, state) {
+            return FloatingActionButton(
+              child: const Icon(Icons.add),
+              onPressed: () {
+                context.read<ToWatchCubit>().addFilm(controller.text);
+                controller.clear();
+              },
+            );
+          },
+        ),
       ),
       body: BlocProvider(
-        create: (context) => ToWatchCubit()..start(),
+        create: (context) => ToWatchCubit(WatchRepository())..start(),
         child: BlocBuilder<ToWatchCubit, ToWatchState>(
           builder: (context, state) {
             if (state.errorMessage.isNotEmpty) {
@@ -31,21 +37,18 @@ class ToWatchPage extends StatelessWidget {
                 child: CircularProgressIndicator(),
               );
             }
-            final documents = state.documents;
+            final watchModels = state.documents;
             return ListView(
               children: [
-                for (final document in documents) ...[
+                for (final watchModel in watchModels) ...[
                   Dismissible(
                       key: ValueKey(
-                        document.id,
+                        watchModel.id,
                       ),
                       onDismissed: (_) {
-                        FirebaseFirestore.instance
-                            .collection('movies')
-                            .doc(document.id)
-                            .delete();
+                        context.read<ToWatchCubit>().deleteFilm(watchModel.id);
                       },
-                      child: MovieWidget(document['title'])),
+                      child: MovieWidget(watchModel.title)),
                 ],
                 TextField(
                   controller: controller,

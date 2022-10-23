@@ -8,7 +8,7 @@ class ReviewsState {
     required this.isLoading,
   });
 
-  final List<QueryDocumentSnapshot<Object?>> documents;
+  final List<ReviewsModel> documents;
   final String errorMessage;
   final bool isLoading;
 }

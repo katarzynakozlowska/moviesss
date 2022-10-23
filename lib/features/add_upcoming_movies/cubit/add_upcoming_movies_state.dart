@@ -2,7 +2,7 @@ part of 'add_upcoming_movies_cubit.dart';
 
 @immutable
 class AddUpcomingMoviesState {
-  AddUpcomingMoviesState({
+  const AddUpcomingMoviesState({
     this.errorMessage = '',
     this.saved = false,
   });
