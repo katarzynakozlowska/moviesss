@@ -1,3 +1,4 @@
+import 'package:curlzzz_new/features/authentication/pages/auth_gate.dart';
 import 'package:curlzzz_new/features/home/home_page_content.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.pink,
       ),
-      home: const HomePage(),
+      home: const AuthGate(),
     );
   }
 }
