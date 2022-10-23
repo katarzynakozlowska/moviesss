@@ -5,6 +5,7 @@ class UpcomingReposiroty {
   Stream<List<UpcomingModel>> getUpcomingStream() {
     return FirebaseFirestore.instance
         .collection('upcoming')
+        .orderBy('date', descending: false)
         .snapshots()
         .map((querySnapshot) {
       return querySnapshot.docs.map((doc) {

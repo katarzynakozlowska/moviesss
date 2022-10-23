@@ -2,6 +2,7 @@ import 'package:curlzzz_new/features/add_upcoming_movies/cubit/add_upcoming_movi
 import 'package:curlzzz_new/repositories/upcoming_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class AddUpcomingMovie extends StatefulWidget {
   const AddUpcomingMovie({super.key});
@@ -80,7 +81,7 @@ class _AddUpcomingMovieState extends State<AddUpcomingMovie> {
             },
           );
         },
-        dateFormatted: _date?.toIso8601String(),
+        dateFormatted: _date == null ? null : DateFormat.MMMEd().format(_date!),
       ),
     );
   }

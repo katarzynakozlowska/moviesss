@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class UpcomingModel {
   UpcomingModel({
     required this.title,
@@ -13,5 +15,9 @@ class UpcomingModel {
 
   String daysLeft() {
     return date.difference(DateTime.now()).inDays.toString();
+  }
+
+  String dateFormatted() {
+    return DateFormat.MMMEd().format(date);
   }
 }

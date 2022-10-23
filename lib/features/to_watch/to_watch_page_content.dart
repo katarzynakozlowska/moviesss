@@ -11,14 +11,19 @@ class ToWatchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {
-          FirebaseFirestore.instance
-              .collection('movies')
-              .add({'title': controller.text});
-          controller.clear();
-        },
+      floatingActionButton: BlocProvider(
+        create: (context) => ToWatchCubit(WatchRepository()),
+        child: BlocBuilder<ToWatchCubit, ToWatchState>(
+          builder: (context, state) {
+            return FloatingActionButton(
+              child: const Icon(Icons.add),
+              onPressed: () {
+                context.read<ToWatchCubit>().addFilm(controller.text);
+                controller.clear();
+              },
+            );
+          },
+        ),
       ),
       body: BlocProvider(
         create: (context) => ToWatchCubit(WatchRepository())..start(),
@@ -41,10 +46,7 @@ class ToWatchPage extends StatelessWidget {
                         watchModel.id,
                       ),
                       onDismissed: (_) {
-                        FirebaseFirestore.instance
-                            .collection('movies')
-                            .doc(watchModel.id)
-                            .delete();
+                        context.read<ToWatchCubit>().deleteFilm(watchModel.id);
                       },
                       child: MovieWidget(watchModel.title)),
                 ],

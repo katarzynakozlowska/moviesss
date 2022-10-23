@@ -12,4 +12,21 @@ class WatchRepository {
       }).toList();
     });
   }
+
+  Future<void> addMovies({
+    required String title,
+  }) async {
+    await FirebaseFirestore.instance.collection('movies').add(
+      {'title': title},
+    );
+  }
+
+  Future<void> dismiss({required String id}) async {
+    await FirebaseFirestore.instance
+        .collection(
+          'movies',
+        )
+        .doc(id)
+        .delete();
+  }
 }

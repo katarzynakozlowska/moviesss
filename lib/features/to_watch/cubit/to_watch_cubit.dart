@@ -21,6 +21,15 @@ class ToWatchCubit extends Cubit<ToWatchState> {
         );
   final WatchRepository _watchRepository;
   StreamSubscription? _streamSubscription;
+
+  Future<void> addFilm(String title) async {
+    await _watchRepository.addMovies(title: title);
+  }
+
+  Future<void> deleteFilm(String id) async {
+    await _watchRepository.dismiss(id: id);
+  }
+
   Future<void> start() async {
     emit(
       const ToWatchState(

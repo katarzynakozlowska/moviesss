@@ -91,7 +91,7 @@ class UpcomingMovieWidget extends StatelessWidget {
           Container(
             color: Colors.white,
             height: 20,
-            width: 300,
+            width: 350,
             child: Center(
               child: Text(upcomingModel.title),
             ),
@@ -100,16 +100,14 @@ class UpcomingMovieWidget extends StatelessWidget {
             height: 20,
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Container(
-                color: Colors.white,
                 child: Text(
-                  upcomingModel.date.toString(),
+                  upcomingModel.dateFormatted(),
                 ),
               ),
               Container(
-                color: Colors.white,
                 child: Column(
                   children: [
                     Text(
