@@ -1,20 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:curlzzz_new/data_source/remote_reviews_data_source.dart';
 import 'package:curlzzz_new/models/reviews_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class ReviewsRepository {
+  ReviewsRepository(this._reviewsRemoteDataSource);
+  final ReviewsRemoteDataSource _reviewsRemoteDataSource;
+
   Stream<List<ReviewsModel>> getReviewsStream() {
-    final userID = FirebaseAuth.instance.currentUser?.uid;
-    if (userID == null) {
-      throw Exception('User is not logged in');
-    }
-    return FirebaseFirestore.instance
-        .collection('users')
-        .doc(userID)
-        .collection('reviews')
-        .orderBy('rating', descending: true)
-        .snapshots()
-        .map((querySnapshot) {
+    return _reviewsRemoteDataSource.getReviewsRemoteData().map((querySnapshot) {
       return querySnapshot.docs.map((doc) {
         return ReviewsModel(
           title: doc['title'],
@@ -28,33 +20,11 @@ class ReviewsRepository {
   Future<void> delete({
     required String id,
   }) {
-    final userID = FirebaseAuth.instance.currentUser?.uid;
-    if (userID == null) {
-      throw Exception('User is not logged in');
-    }
-    return FirebaseFirestore.instance
-        .collection('users')
-        .doc(userID)
-        .collection(
-          'reviews',
-        )
-        .doc(id)
-        .delete();
+    return _reviewsRemoteDataSource.deleteRemoteData(id: id);
   }
 
-  Future<void> addReviews(
-      {required String title, required double rating}) async {
-    final userID = FirebaseAuth.instance.currentUser?.uid;
-    if (userID == null) {
-      throw Exception('User is not logged in');
-    }
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(userID)
-        .collection('reviews')
-        .add({
-      'title': title,
-      'rating': rating,
-    });
+  Future<void> addReviews({required String title, required double rating}) {
+    return _reviewsRemoteDataSource.addRemoteReviewsData(
+        title: title, rating: rating);
   }
 }

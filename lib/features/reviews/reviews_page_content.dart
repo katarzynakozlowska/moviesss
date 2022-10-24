@@ -1,3 +1,4 @@
+import 'package:curlzzz_new/data_source/remote_reviews_data_source.dart';
 import 'package:curlzzz_new/features/add_reviews/add_reviews_page_content.dart';
 import 'package:curlzzz_new/features/reviews/cubit/reviews_cubit.dart';
 import 'package:curlzzz_new/models/reviews_model.dart';
@@ -24,7 +25,8 @@ class ReviewsPage extends StatelessWidget {
         ),
       ),
       body: BlocProvider(
-        create: (context) => ReviewsCubit(ReviewsRepository())..start(),
+        create: (context) =>
+            ReviewsCubit(ReviewsRepository(ReviewsRemoteDataSource()))..start(),
         child: BlocBuilder<ReviewsCubit, ReviewsState>(
           builder: (context, state) {
             if (state.errorMessage.isNotEmpty) {
@@ -78,7 +80,6 @@ class ReviewsWidget extends StatelessWidget {
           children: [
             Text(reviewsModel.title),
             Text(reviewsModel.rating.toString())
-            
           ],
         ));
   }

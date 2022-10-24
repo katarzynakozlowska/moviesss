@@ -1,19 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:curlzzz_new/data_source/remote_upcoming_data_source.dart';
 import 'package:curlzzz_new/models/upcoming_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class UpcomingReposiroty {
+  UpcomingReposiroty(this._upcomingRemoteDataSource);
+  final UpcomingRemoteDataSource _upcomingRemoteDataSource;
+
   Stream<List<UpcomingModel>> getUpcomingStream() {
-    final userID = FirebaseAuth.instance.currentUser?.uid;
-    if (userID == null) {
-      throw Exception('User is not logged in');
-    }
-    return FirebaseFirestore.instance
-        .collection('users')
-        .doc(userID)
-        .collection('upcoming')
-        .orderBy('date', descending: false)
-        .snapshots()
+    return _upcomingRemoteDataSource
+        .getUpcomingRemoteData()
         .map((querySnapshot) {
       return querySnapshot.docs.map((doc) {
         return UpcomingModel(
@@ -31,18 +26,11 @@ class UpcomingReposiroty {
     required String url,
     required DateTime date,
   }) async {
-    final userID = FirebaseAuth.instance.currentUser?.uid;
-    if (userID == null) {
-      throw Exception('User is not logged in');
-    }
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(userID)
-        .collection('upcoming')
-        .add({
-      'title': title,
-      'url': url,
-      'date': date,
-    });
+    await _upcomingRemoteDataSource.addUpcomingRemoteData(
+        title: title, url: url, date: date);
+  }
+
+  Future<void> deleteUpcoming({required String id}) async {
+    await _upcomingRemoteDataSource.deleteUpcomingRemoteData(id: id);
   }
 }

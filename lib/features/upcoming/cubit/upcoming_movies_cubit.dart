@@ -2,7 +2,6 @@ import 'dart:async';
 
 // ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curlzzz_new/models/upcoming_model.dart';
 import 'package:curlzzz_new/repositories/upcoming_repository.dart';
 // ignore: depend_on_referenced_packages
@@ -54,7 +53,7 @@ class UpcomingMoviesCubit extends Cubit<UpcomingMoviesState> {
   }
 
   Future<void> dismiss({required String id}) async {
-    await FirebaseFirestore.instance.collection('upcoming').doc(id).delete();
+    await _upcomingRepository.deleteUpcoming(id: id);
   }
 
   @override

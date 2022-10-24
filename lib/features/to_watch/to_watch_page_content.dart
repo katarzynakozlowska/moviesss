@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:curlzzz_new/data_source/remote_watch_data_source.dart';
 import 'package:curlzzz_new/features/to_watch/cubit/to_watch_cubit.dart';
 import 'package:curlzzz_new/repositories/watch_repository.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +12,7 @@ class ToWatchPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: BlocProvider(
-        create: (context) => ToWatchCubit(WatchRepository()),
+        create: (context) => ToWatchCubit(WatchRepository(RemoteWatchDataSource())),
         child: BlocBuilder<ToWatchCubit, ToWatchState>(
           builder: (context, state) {
             return FloatingActionButton(
@@ -26,7 +26,8 @@ class ToWatchPage extends StatelessWidget {
         ),
       ),
       body: BlocProvider(
-        create: (context) => ToWatchCubit(WatchRepository())..start(),
+        create: (context) =>
+            ToWatchCubit(WatchRepository(RemoteWatchDataSource()))..start(),
         child: BlocBuilder<ToWatchCubit, ToWatchState>(
           builder: (context, state) {
             if (state.errorMessage.isNotEmpty) {

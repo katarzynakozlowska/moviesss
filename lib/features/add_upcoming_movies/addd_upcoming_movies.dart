@@ -1,3 +1,4 @@
+import 'package:curlzzz_new/data_source/remote_upcoming_data_source.dart';
 import 'package:curlzzz_new/features/add_upcoming_movies/cubit/add_upcoming_movies_cubit.dart';
 import 'package:curlzzz_new/repositories/upcoming_repository.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,8 @@ class _AddUpcomingMovieState extends State<AddUpcomingMovie> {
         title: const Text('Add upcoming movie'),
         actions: [
           BlocProvider(
-            create: (context) => AddUpcomingMoviesCubit(UpcomingReposiroty()),
+            create: (context) => AddUpcomingMoviesCubit(
+                UpcomingReposiroty(UpcomingRemoteDataSource())),
             child: BlocListener<AddUpcomingMoviesCubit, AddUpcomingMoviesState>(
               listener: (context, state) {
                 if (state.saved == true) {
