@@ -1,3 +1,4 @@
+import 'package:curlzzz_new/data_source/remote_upcoming_data_source.dart';
 import 'package:curlzzz_new/features/add_upcoming_movies/addd_upcoming_movies.dart';
 import 'package:curlzzz_new/features/upcoming/cubit/upcoming_movies_cubit.dart';
 import 'package:curlzzz_new/models/upcoming_model.dart';
@@ -23,7 +24,9 @@ class UpcomingMoviesPage extends StatelessWidget {
         child: const Icon(Icons.add),
       ),
       body: BlocProvider(
-        create: (context) => UpcomingMoviesCubit(UpcomingReposiroty())..start(),
+        create: (context) =>
+            UpcomingMoviesCubit(UpcomingReposiroty(UpcomingRemoteDataSource()))
+              ..start(),
         child: BlocBuilder<UpcomingMoviesCubit, UpcomingMoviesState>(
           builder: (context, state) {
             if (state.errorMessage.isNotEmpty) {
@@ -102,20 +105,16 @@ class UpcomingMovieWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Container(
-                child: Text(
-                  upcomingModel.dateFormatted(),
-                ),
+              Text(
+                upcomingModel.dateFormatted(),
               ),
-              Container(
-                child: Column(
-                  children: [
-                    Text(
-                      upcomingModel.daysLeft(),
-                    ),
-                    const Text('days left')
-                  ],
-                ),
+              Column(
+                children: [
+                  Text(
+                    upcomingModel.daysLeft(),
+                  ),
+                  const Text('days left')
+                ],
               )
             ],
           )

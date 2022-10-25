@@ -1,3 +1,4 @@
+import 'package:curlzzz_new/data_source/remote_reviews_data_source.dart';
 import 'package:curlzzz_new/features/add_reviews/cubit/add_reviews_cubit.dart';
 import 'package:curlzzz_new/repositories/reviews_repository.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +51,7 @@ class _AddReviewState extends State<AddReview> {
               label: movieRating.toString(),
             ),
             BlocProvider(
-              create: (context) => AddReviewsCubit(ReviewsRepository()),
+              create: (context) => AddReviewsCubit(ReviewsRepository(ReviewsRemoteDataSource())),
               child: BlocListener<AddReviewsCubit, AddReviewsState>(
                 listener: (context, state) {
                   if (state.saved == true) {
